@@ -1,51 +1,105 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/common :: head('회원가입')"></head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head th:replace="fragments/common :: head('회원가입')">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/> -->
 
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<link th:href="@{/css/sign-in.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link th:href="@{/css/sign-in.css}" rel="stylesheet">
+</head>
 
 <body class="text-center">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: navbar('home')">
     </nav>
 
-    
-    <form class="form-signin" th:action="@{/account/register}" method="post" autocomplete="off">
-        <a th:href="@{/}"><img class="mb-4" src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"></a>
+    <form class="form-signin" id="form-signin" th:action="@{/account/register}" method="post" autocomplete="off">
+        <a th:href="@{/}"><img class="mb-4" src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg"
+                alt="" width="72" height="72"></a>
         <h1 class="h3 mb-3 font-weight-normal">회원 가입</h1>
-        
+
         <label for="inputId" class="sr-only">ID</label>
         <input type="text" id="inputId" name="userName" class="form-control" placeholder="ID" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" name="userPassword" class="form-control" placeholder="Password" required>
-        <!-- <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div> -->
-        
-        <button class="btn btn-lg btn-primary btn-block" type="submit">회원 가입</button>
+        <input type="password" id="inputPassword" name="userPassword" class="form-control" placeholder="Password"
+            required>
+        <button class="btn btn-lg btn-primary" type="submit" id="btn-signin">회원 가입</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
-
-        <!-- <span th:utext="회원가입에 성공하셨습니다"></span> -->
     </form>
-    
-   
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
         crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
+
+    <!-- <script th:inline="javascript" src="/static/js/register.js"></script> -->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $("#form-signin").submit(function (event) {
+                event.preventDefault();
+                registerAJAX();
+            });
+        });
+        
+        function registerAJAX() {
+            let signinForm = {
+                userName: $("#inputId").val(),
+                userPassword: $("#inputPassword").val()
+            };
+        
+            //var token = $("meta[name='_csrf']").attr("content");
+            //var header = $("meta[name='_csrf_header']").attr("content");
+            
+        
+            $.ajax({
+                type: "POST",
+                url: "/account/register",
+                //async:false,     //동기화로 설정함 
+                //contentType:"applicaton/json; charset=utf-8", //http body 데이터의 타입 설정(MIME)       
+                data: JSON.stringify(signinForm),   //http body 데이터
+                dataType: "json", //서버에서 응답이 왔을때 기본적으로는  string 하지만 json으로 정해준다면 javascript 오브젝트로 변경해줌
+                cache: false,
+                headers: {
+                    "Accept" : "application/json; charset=utf-8",
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                
+                // beforeSend: function (xhr) {
+                //     if (token && header) {
+                //         xhr.setRequestHeader(header, token);
+                //     }
+                // },       
+                success: function (data) {
+                    alert("통신성공");
+                    
+                    if (data.status == "success") {
+                        alert("회원가입 성공");
+                        location.href = "/"
+                    }
+                    else if (data.status == "duplicate") {
+                        alert("중복된 아이디입니다");
+                    }
+                    else {
+                        alert("??");
+                    }
+                },
+                error: function (error) {
+                    console.log("ERROR : ", error);
+                    alert("통신 실패");
+                },
+            });
+        }
+        </script>
+       
 </body>
 
 </html>

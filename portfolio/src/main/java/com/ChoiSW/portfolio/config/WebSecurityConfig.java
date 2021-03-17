@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 
 import javax.sql.DataSource;
@@ -26,14 +27,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf()
+                    .disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/account/register", "/css/**","/api/**").permitAll()
+                    .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/account/login")
-                    .usernameParameter("userName")
-                    .passwordParameter("userPassword")
+                    //.usernameParameter("userName")
+                    //.passwordParameter("userPassword")
                     .defaultSuccessUrl("/",true)
                     .permitAll()
                     .and()
