@@ -45,6 +45,7 @@ public class AccountController {
         return "/account/register";
     }
 
+
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<ServiceResponse> register(@RequestBody User user){
@@ -53,7 +54,7 @@ public class AccountController {
         if(userExists != null) {
             System.out.println("이미 존재함 user duplicate");
             ServiceResponse<User> response = new ServiceResponse<>("duplicate", user);
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         else {
             try {
@@ -65,7 +66,7 @@ public class AccountController {
                 else{
                     System.out.println("회원가입 실패 register error ");
                     ServiceResponse<User> response = new ServiceResponse<>("error", user);
-                    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
                 }
 
             } catch (Exception e) {
@@ -76,7 +77,8 @@ public class AccountController {
         }
         System.out.println("회원가입 에러 발생");
         ServiceResponse<User> response = new ServiceResponse<>("error", user);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
 }
