@@ -21,27 +21,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;  //application.properties 의 datasource 설정들을 주입시킴
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 
     //인증절차에 관한 설명
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                //.csrf()
-                //    .disable()
+
                 .authorizeRequests()
-                    .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**").permitAll()
+                    .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**","/account/login*").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/account/login")
+                    //.loginProcessingUrl("/account/login")
                     .usernameParameter("userName")
                     .passwordParameter("userPassword")
-                    .defaultSuccessUrl("/",true)
+                    .successHandler(customAuthenticationSuccessHandler)
+                    .failureHandler(customAuthenticationFailureHandler)
                     .permitAll()
                     .and()
                 .logout()
                     .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
                     .permitAll();
     }
 

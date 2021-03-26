@@ -21,9 +21,19 @@
         <label for="inputId" class="sr-only">ID</label>
         <input type="text" id="inputId" name="userName" class="form-control" placeholder="ID" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" name="userPassword" class="form-control" placeholder="Password"
-            required>
-        <button class="btn btn-lg btn-primary" type="submit" id="btn-signin">회원 가입</button>
+        <input type="password" id="inputPassword" name="userPassword" class="form-control" placeholder="Password" required>
+
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="option1" name="userAuthority" class="custom-control-input" value="1" checked="true">
+            <label class="custom-control-label" for="option1">User</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="option2" name="userAuthority" class="custom-control-input" value="2">
+            <label class="custom-control-label" for="option2">Admin</label>
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary" type="submit" id="btn-signin">회원 가입</button>
+        </div>
         <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
     </form>
 
@@ -48,9 +58,12 @@
         });
         
         function registerAJAX() {
+            var userAuthority = $("input[name='userAuthority']:checked");
+            
             let signinForm = {
                 userName: $("#inputId").val(),
-                userPassword: $("#inputPassword").val()
+                userPassword: $("#inputPassword").val(),
+                userAuthority: userAuthority.val()
             };
             const token = $("meta[name='_csrf']").attr("content");
             const header = $("meta[name='_csrf_header']").attr("content");
@@ -66,10 +79,6 @@
                 dataType: "json", //서버에서 응답이 왔을때 기본적으로는  string 하지만 json으로 정해준다면 javascript 오브젝트로 변경해줌
                 cache: false,
                 
-                // headers: {
-                //     "Accept" : "application/json; charset=utf-8",
-                //     "Content-Type": "application/json; charset=utf-8"
-                // },
                 beforeSend : function(xhr){
                     if(token && header){
                         xhr.setRequestHeader("Accept","application/json; charset=utf-8");
@@ -79,7 +88,6 @@
                 }, 
                 success: function (data) {
                     alert("통신성공");
-                    console.log(data);
                     console.log(data.status);
                     
                     if (data.status == "success") {
