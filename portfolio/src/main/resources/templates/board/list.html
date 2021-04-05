@@ -12,30 +12,36 @@
 		<div>총 갯수 : <span th:text="${boardList.totalElements}"></span>
 		</div>
 
+		<h1>list.html </h1>
+
 		<form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
 			<div class="form-group mx-sm-3 mb-2">
 				<label for="searchText" class="sr-only">검색</label>
 				<input type="text" class="form-control" id="searchText" name="searchText" placeholder="검색 내용" th:value="${param.searchText}">
 			</div>
-			<button type="submit" class="btn btn-light mb-2">검색 </button>
+			<button type="submit" class="btn btn-light mb-2">검색</button>
 
 		</form>
 
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th scope="col" class="text-center"> 번호</th>
+					<th scope="col" class="text-center">번호</th>
 					<th scope="col" class="text-center">제목</th>
 					<th scope="col" class="text-center">작성자</th>
-					<!-- <th scope="col">조회수</th> -->
+					<th scope="col" class="text-center">작성일</th>
+					<th scope="col" class="text-center">최종 수정일</th>
+					<!-- <th scope="col">조회수</th> -->		
 				</tr>
 			</thead>
 
 			<tbody>
 				<tr th:each="board : ${boardList}">
 					<td class="text-center" th:text="${board.boardId}">1</td>
-					<td class="text-center"><a th:text="${board.title}" th:href="@{/board/write(boardId=${board.boardId})}">제목</a></td>
+					<td class="text-center"><a th:text="${board.title}" th:href="@{/board/view(boardId=${board.boardId})}">제목</a></td>
 					<td class="text-center" th:text="${board.user.userName}">홍길동</td>
+					<td class="text-center" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
+					<td class="text-center" th:text="${#temporals.format(board.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
 					<!-- <td th:text="${boards.boardId}">1</td> -->
 				</tr>
 
@@ -61,8 +67,6 @@
 				</li>
 			</ul>
 		</nav>
-
-
 
 		<div class="text-right">
 			<a type="button" class="btn btn-primary" th:href="@{/board/write}">쓰기</a>

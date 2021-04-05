@@ -1,0 +1,93 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/common :: head('board')"></head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: navbar('board')">
+	</nav>
+
+	<div class="container">
+		<h2>게시판</h2>
+
+		<div class="form-group">
+			<label for="title">제목</label>
+			<p th:text="${board.title}"></p>
+		</div>
+
+		<div class="form-group">
+			<label for="content">내용</label>
+			<p th:text="${board.content}"></p>
+
+		</div>
+
+<!-- 
+		<th:block th:if="${#authentication.name} == ${board.user.userName}">
+			<div class="pull-right">
+				<form id="delete-form" th:action="@{/board/delete/{id}(id=${board.boardId})}" method="post">
+					<input type="hidden" name="_method" value="delete"/>
+					<a type="button" id="delete-btn" class="btn btn-danger">삭제</a>
+				</form>
+
+				<a type="button" class="btn btn-primary" th:href="@{/board/update/{id}(id=${board.boardId})}">수정</a>
+			</div>
+		</th:block> -->
+
+
+		<th:block th:if="${#authentication.name} == ${board.user.userName}">
+			<div class="pull-right">
+				<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
+
+				<a type="button" class="btn btn-primary" id="updateButton" th:href="@{/board/update/{id}(id=${board.boardId})}">수정</a>
+			</div>
+		</th:block>
+		
+		<h1>view.html</h1>
+
+		
+	</div>
+
+	
+	<script src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+		crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" 
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" 
+		integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" 
+		crossorigin="anonymous"></script>
+
+	<script th:inline="javascript">
+		$("#deleteButton").click(function() {
+			const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+			var boardId = [[ ${board.boardId} ]];
+			$.ajax({
+				url : "http://localhost:8080/board/delete/" + boardId,
+				type : "DELETE",
+
+				beforeSend : function(xhr){
+					if(token && header){
+						xhr.setRequestHeader("Accept","application/json; charset=utf-8");
+						xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
+						xhr.setRequestHeader(header, token);
+					}
+				},
+				
+				success : function() {
+					alert("삭제 성공!");
+					location.href = "/board/list";
+				},
+				error : function(error) {
+					console.log(error);
+					alert("삭제 실패!");
+				}
+			});
+		});
+		</script>
+
+	
+</body>
+
+</html>

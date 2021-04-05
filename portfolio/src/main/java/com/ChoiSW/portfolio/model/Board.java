@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -24,6 +25,12 @@ public class Board {
     @NotBlank(message ="내용을 입력해주세요")
     @Size(max=30,message = "30자 이하입니다")
     private String content;
+
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
+
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")

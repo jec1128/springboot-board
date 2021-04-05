@@ -7,6 +7,8 @@ import com.ChoiSW.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class BoardService {
 
@@ -16,6 +18,7 @@ public class BoardService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public Board save(String userName, Board board) {
         User user = userRepository.findByUserName(userName);
         board.setUser(user);

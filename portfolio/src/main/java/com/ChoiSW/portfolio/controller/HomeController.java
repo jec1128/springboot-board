@@ -3,7 +3,6 @@ package com.ChoiSW.portfolio.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -15,4 +14,9 @@ public class HomeController {
     }
 
 
+    @GetMapping("access-denied")
+    public String denied(){
+        System.out.println("homeController access denied");
+        return "/access-denied";
+    }
 }

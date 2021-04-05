@@ -27,6 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
 
     //인증절차에 관한 설명
     @Override
@@ -34,12 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
 
                 .authorizeRequests()
+                    .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                     .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**","/account/login*").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/account/login")
-                    //.loginProcessingUrl("/account/login")
                     .usernameParameter("userName")
                     .passwordParameter("userPassword")
                     .successHandler(customAuthenticationSuccessHandler)
@@ -50,6 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
                     .permitAll();
+
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
     }
 
     //인증을 위한 사용자 설명

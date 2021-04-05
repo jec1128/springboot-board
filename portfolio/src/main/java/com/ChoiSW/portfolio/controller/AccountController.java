@@ -1,8 +1,6 @@
 package com.ChoiSW.portfolio.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.ChoiSW.portfolio.dto.RegisterForm;
-import com.ChoiSW.portfolio.model.ServiceResponse;
 import com.ChoiSW.portfolio.model.User;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import com.ChoiSW.portfolio.service.UserService;
@@ -41,7 +39,7 @@ public class AccountController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<ServiceResponse> register(@RequestBody RegisterForm registerForm){
+    public ResponseEntity<?> register(@RequestBody RegisterForm registerForm){
         System.out.println(registerForm.getUserName() + "  " + registerForm.getUserPassword() + "  " + registerForm.getUserAuthority());
         User user = new User();
         user.setUserName(registerForm.getUserName());
@@ -50,20 +48,17 @@ public class AccountController {
 
         if(userExists != null) {
             System.out.println("이미 존재함 user duplicate");
-            ServiceResponse<User> response = new ServiceResponse<>("duplicate", user);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>("{}}", HttpStatus.CONFLICT);
         }
         else {
             try {
                 if(userService.save(user,registerForm.getUserAuthority()) == 1) {   // 1이 성공 -1이 실패
                     System.out.println("회원가입 성공 register success");
-                    ServiceResponse<User> response = new ServiceResponse<>("success", user);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
+                    return new ResponseEntity<>("{}", HttpStatus.OK);
                 }
                 else{
-                    System.out.println("회원가입 실패 register error ");
-                    ServiceResponse<User> response = new ServiceResponse<>("error", user);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
+                    System.out.println("회원가입 실패 register fail");
+                    return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
                 }
 
             } catch (Exception e) {
@@ -73,8 +68,7 @@ public class AccountController {
 
         }
         System.out.println("회원가입 에러 발생");
-        ServiceResponse<User> response = new ServiceResponse<>("error", user);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
 
     }
 

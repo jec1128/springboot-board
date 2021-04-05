@@ -31,18 +31,17 @@ public class UserService {
     @Transactional
     public int save(User user, int authority) throws Exception {
         try {
-            //< encoding the password
+            // encoding the password
             String encodedPassword = passwordEncoder.encode(user.getUserPassword());
             user.setUserPassword(encodedPassword);
 
-            //< set the user role
+            // set the user role
             user.setUserEnabled(true);
 
             Role role = new Role();
 
             role.setRoleId(authority);
             user.getRoleList().add(role);
-            System.out.println("userService : userRespoitory.save()");
             userRepository.save(user);
             return 1;
         } catch (Exception e){

@@ -2,12 +2,13 @@ package com.ChoiSW.portfolio.controller;
 
 import com.ChoiSW.portfolio.model.Board;
 import com.ChoiSW.portfolio.repository.BoardRepository;
-//import com.ChoiSW.portfolio.validator.BoardValidator;
 import com.ChoiSW.portfolio.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+
+//import com.ChoiSW.portfolio.validator.BoardValidator;
 
 
 @Controller
@@ -51,37 +55,66 @@ public class BoardController {
         return "board/list";
     }
 
-    @GetMapping("/write")
-    public String write(Model model, @RequestParam(required = false) Long boardId){
+    @GetMapping("/view")
+    public String view(Model model, Long boardId){
+        Board board =boardRepository.findById(boardId).orElse(null);
+        model.addAttribute("board", board);
 
-        if(boardId==null){
-            model.addAttribute("board", new Board());
-            System.out.println("새 글 쓰러가기");
-        }
-        else{
-            Board board =boardRepository.findById(boardId).orElse(null);
-            model.addAttribute("board", board);
-            System.out.println("기존에 있던 글보기");
-        }
+        return "board/view";
+    }
+
+    @GetMapping("/write")  // write.html 보여주기
+    public String write(Model model){
+        model.addAttribute("board", new Board());
 
         return "board/write";
     }
 
-    @PostMapping("/write")
-    public String writingSubmit(@Valid Board board, BindingResult bindingResult, Authentication authentication){
-        /*boardValidator.validate(board,bindingResult);
+    @PostMapping("/write") //write.html 내용을 처리하기
+    public String write(@Valid Board board, BindingResult bindingResult, Authentication authentication){
 
-        if(bindingResult.hasErrors()){
-            return "board/write";
-        }*/
         if(bindingResult.hasErrors()){
             return "board/write";
         }
         String userName = authentication.getName();
+        LocalDateTime currentTime = LocalDateTime.now();
+        board.setCreatedDate(currentTime);
+        board.setUpdatedDate(currentTime);
         boardService.save(userName, board);
-
-
         System.out.println("write 성공");
-        return "redirect:/board/list"; // 결과값을 받아서 새로운 board까지 리스트 페이지에 보이게 하도록함.
+
+        return "redirect:/board/list";
+    }
+
+    @GetMapping("/update/{id}")
+    public String update(Model model, @PathVariable("id") Long boardId){
+        Board board =boardRepository.findById(boardId).orElse(null);
+        model.addAttribute("board", board);
+        System.out.println("수정하는 페이지(getmapping) 컨트롤러");
+
+        return "board/update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable("id") Long boardId, @Valid Board board, BindingResult bindingResult, Authentication authentication){
+
+        if(bindingResult.hasErrors()){
+            return "board/update";
+        }
+
+        String userName = authentication.getName();
+        LocalDateTime currentTime = LocalDateTime.now();
+        board.setUpdatedDate(currentTime);
+        boardService.save(userName, board);
+        System.out.println("update 성공");
+
+        return "redirect:/board/list";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long boardId){
+        Board board =boardRepository.findById(boardId).orElse(null);
+        boardRepository.delete(board);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 }

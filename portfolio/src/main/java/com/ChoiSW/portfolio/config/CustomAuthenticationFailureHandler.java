@@ -27,11 +27,5 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         setDefaultFailureUrl(DEFAULT_FAILURE_URL+errorMsg);
         super.onAuthenticationFailure(request,response,exception);
 
-        /*request.setAttribute("username", userName);
-        request.setAttribute("userpassword", userPassword);
-        request.setAttribute("errormsg", errorMsg);
-
-        response.sendRedirect(DEFAULT_FAILURE_URL+errorMsg);*/
-        //request.getRequestDispatcher(DEFAULT_FAILURE_URL+errorMsg).forward(request,response);
     }
 }
