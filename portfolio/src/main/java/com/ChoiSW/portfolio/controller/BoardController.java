@@ -6,6 +6,7 @@ import com.ChoiSW.portfolio.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -36,9 +38,9 @@ public class BoardController {
 
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 2) Pageable pageable,
+    public String list(Model model, @PageableDefault(size = 5, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText){
-        //Page<Board> boardList = boardRepository.findAll(pageable);
+
         Page<Board> boardList = boardRepository.findBoardByTitleContainingOrContentContaining(searchText,searchText,pageable);
 
         int startPage = Math.max(1,boardList.getPageable().getPageNumber() - 5);
@@ -58,8 +60,8 @@ public class BoardController {
     @GetMapping("/view")
     public String view(Model model, Long boardId){
         Board board =boardRepository.findById(boardId).orElse(null);
+        boardService.updateViewCount(boardId);
         model.addAttribute("board", board);
-
         return "board/view";
     }
 
@@ -71,15 +73,13 @@ public class BoardController {
     }
 
     @PostMapping("/write") //write.html 내용을 처리하기
-    public String write(@Valid Board board, BindingResult bindingResult, Authentication authentication){
+    public String write(@Valid Board board, @RequestParam(value = "file", required = false) MultipartFile file , BindingResult bindingResult, Authentication authentication){
 
         if(bindingResult.hasErrors()){
             return "board/write";
         }
+
         String userName = authentication.getName();
-        LocalDateTime currentTime = LocalDateTime.now();
-        board.setCreatedDate(currentTime);
-        board.setUpdatedDate(currentTime);
         boardService.save(userName, board);
         System.out.println("write 성공");
 

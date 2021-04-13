@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 public class UserService {
@@ -35,12 +36,14 @@ public class UserService {
             String encodedPassword = passwordEncoder.encode(user.getUserPassword());
             user.setUserPassword(encodedPassword);
 
+            LocalDateTime currentTime = LocalDateTime.now();
+            user.setCreatedDate(currentTime);
+
             // set the user role
             user.setUserEnabled(true);
 
             Role role = new Role();
-
-            role.setRoleId(authority);
+            role.setRoleId(authority);   //1이 user 2가 admin
             user.getRoleList().add(role);
             userRepository.save(user);
             return 1;

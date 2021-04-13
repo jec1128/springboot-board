@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 public class BoardService {
@@ -22,6 +23,15 @@ public class BoardService {
     public Board save(String userName, Board board) {
         User user = userRepository.findByUserName(userName);
         board.setUser(user);
+        LocalDateTime currentTime = LocalDateTime.now();
+        board.setCreatedDate(currentTime);
+        board.setUpdatedDate(currentTime);
+        board.setViewCount(0);
         return boardRepository.save(board);
+    }
+
+    @Transactional
+    public int updateViewCount(Long boardId){
+        return boardRepository.updateViewCount(boardId);
     }
 }

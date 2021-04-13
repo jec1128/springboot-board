@@ -31,6 +31,9 @@ public class Board {
 
     private LocalDateTime updatedDate;
 
+    private int viewCount;
+
+
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")

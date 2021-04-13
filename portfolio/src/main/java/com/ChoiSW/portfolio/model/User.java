@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class User {
     private long userId;
     private String userName;
     private String userPassword;
+    private LocalDateTime createdDate;
     private Boolean userEnabled;
 
     @ManyToMany

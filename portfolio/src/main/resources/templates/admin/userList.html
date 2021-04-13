@@ -1,20 +1,20 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/common :: head('board')"></head>
+<head th:replace="fragments/common :: head('admin')"></head>
 
 <body>
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: navbar('board')">
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: navbar('admin')">
 	</nav>
 
 	<div class="container">
-		<h2>게시판</h2>
-		<div>총 갯수 : <span th:text="${boardList.totalElements}"></span>
+		<h2>유저 리스트</h2>
+		<div>총 인원수 : <span th:text="${userList.totalElements}"></span>
 		</div>
 
 		
 
-		<form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
+		<form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/admin/userList}">
 			<div class="form-group mx-sm-3 mb-2">
 				<label for="searchText" class="sr-only">검색</label>
 				<input type="text" class="form-control" id="searchText" name="searchText" placeholder="검색 내용" th:value="${param.searchText}">
@@ -27,22 +27,26 @@
 			<thead>
 				<tr>
 					<th scope="col" class="text-center">번호</th>
-					<th scope="col" class="text-center">제목</th>
-					<th scope="col" class="text-center">작성자</th>
+					<th scope="col" class="text-center">userName</th>
+					<th scope="col" class="text-center">생성일</th>
+					
+					<!-- <th scope="col" class="text-center">작성자</th>
 					<th scope="col" class="text-center">작성일</th>
 					<th scope="col" class="text-center">최종 수정일</th>
-					<th scope="col">조회수</th>
+					<th scope="col">조회수</th> -->
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr th:each="board : ${boardList}">
-					<td class="text-center" th:text="${board.boardId}">1</td>
-					<td class="text-center"><a th:text="${board.title}" th:href="@{/board/view(boardId=${board.boardId})}">제목</a></td>
-					<td class="text-center" th:text="${board.user.userName}">홍길동</td>
+				<tr th:each="user : ${userList}">
+					<td class="text-center" th:text="${user.userId}">1</td>
+                    <td class="text-center" th:text="${user.userName}">user1</td>
+					<td class="text-center" th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
+					<!-- <td class="text-center"><a th:text="${user.userName}" th:href="@{/board/view(boardId=${board.boardId})}">제목</a></td> -->
+					<!-- <td class="text-center" th:text="${board.user.userName}">홍길동</td>
 					<td class="text-center" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
 					<td class="text-center" th:text="${#temporals.format(board.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
-					<td class="text-center" th:text="${board.viewCount}">0</td>
+					<td class="text-center" th:text="${board.viewCount}">0</td> -->
 				</tr>
 
 			</tbody>
@@ -51,26 +55,23 @@
 
 		<nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">
-				<li class="page-item" th:classappend="${1 == boardList.pageable.pageNumber + 1} ? 'disabled'">
-					<a class="page-link" th:href="@{/board/list(page=${boardList.pageable.pageNumber - 1}, searchText=${param.searchText})}"
+				<li class="page-item" th:classappend="${1 == userList.pageable.pageNumber + 1} ? 'disabled'">
+					<a class="page-link" th:href="@{/admin/userList(page=${userList.pageable.pageNumber - 1}, searchText=${param.searchText})}"
 						tabindex="-1" aria-disabled="true">Previous</a>
 				</li>
-				<li class="page-item" th:classappend="${i == boardList.pageable.pageNumber + 1} ? 'disabled'"
+				<li class="page-item" th:classappend="${i == userList.pageable.pageNumber + 1} ? 'disabled'"
 					th:each="i : ${#numbers.sequence(startPage, endPage)}">
-					<a class="page-link" th:href="@{/board/list(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}">1</a>
+					<a class="page-link" th:href="@{/admin/userList(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}">1</a>
 				</li>
 
 				<li class="page-item"
-					th:classappend="${boardList.totalPages == boardList.pageable.pageNumber + 1} ? 'disabled'">
-					<a class="page-link" th:href="@{/board/list(page=${boardList.pageable.pageNumber + 1}, searchText=${param.searchText})}">
+					th:classappend="${userList.totalPages == userList.pageable.pageNumber + 1} ? 'disabled'">
+					<a class="page-link" th:href="@{/admin/userList(page=${userList.pageable.pageNumber + 1}, searchText=${param.searchText})}">
 						Next</a>
 				</li>
 			</ul>
 		</nav>
 
-		<div class="text-right">
-			<a type="button" class="btn btn-primary" th:href="@{/board/write}">쓰기</a>
-		</div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.js"
