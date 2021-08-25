@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/common :: head('admin')"></head>
 
@@ -8,13 +8,13 @@
 	</nav>
 
 	<div class="container">
-		<h2>유저 리스트</h2>
-		<div>총 인원수 : <span th:text="${userList.totalElements}"></span>
+		<h2>게시물 리스트</h2>
+		<div>총 게시글 : <span th:text="${boardList.totalElements}"></span>
 		</div>
 
 		
 
-		<form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/admin/userList}">
+		<form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/admin/boardList}">
 			<div class="form-group mx-sm-3 mb-2">
 				<label for="searchText" class="sr-only">검색</label>
 				<input type="text" class="form-control" id="searchText" name="searchText" placeholder="검색 내용" th:value="${param.searchText}">
@@ -23,35 +23,30 @@
 
 		</form>
 
-		<table class="table table-hover" id = "userList">
+		
+		<table class="table table-hover" id="boardList">
 			<thead>
 				<tr>
 					<th scope="col" class="text-center">번호</th>
-					<th scope="col" class="text-center">userName</th>
-					<th scope="col" class="text-center">생성일</th>
-					<th scope="col" class="text-center">삭제</th>
-
-					<!-- <th scope="col" class="text-center">작성자</th>
+					<th scope="col" class="text-center">제목</th>
+					<th scope="col" class="text-center">작성자</th>
 					<th scope="col" class="text-center">작성일</th>
 					<th scope="col" class="text-center">최종 수정일</th>
-					<th scope="col">조회수</th> -->
+					<th scope="col" class="text-center">조회수</th>
+					<th scope="col" class="text-center">삭제</th>
+					
 				</tr>
 			</thead>
 
 			<tbody>
-
-				<tr th:each="user : ${userList}">
-					<td class="text-center" th:text="${user.userId}">1</td>
-                    <td class="text-center" th:text="${user.userName}">user1</td>
-					<td class="text-center" th:text="${#temporals.format(user.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
-					<td><input type="button" class="btn btn-danger col text-center deleteButton" value="삭제"/></td>
-
-
-					<!-- <td class="text-center"><a th:text="${user.userName}" th:href="@{/board/view(boardId=${board.boardId})}">제목</a></td> -->
-					<!-- <td class="text-center" th:text="${board.user.userName}">홍길동</td>
+				<tr th:each="board : ${boardList}">
+					<td class="text-center" th:text="${board.boardId}">1</td>
+					<td class="text-center"><a th:text="${board.title}" th:href="@{/board/view(boardId=${board.boardId})}">제목</a></td>
+					<td class="text-center" th:text="${board.user.userName}">홍길동</td>
 					<td class="text-center" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
 					<td class="text-center" th:text="${#temporals.format(board.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">2021-01-01 00:00:00</td>
-					<td class="text-center" th:text="${board.viewCount}">0</td> -->
+					<td class="text-center" th:text="${board.viewCount}">0</td>
+					<td><input type="button" class="btn btn-danger col text-center deleteButton" value="삭제"/></td>
 				</tr>
 
 			</tbody>
@@ -60,18 +55,18 @@
 
 		<nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">
-				<li class="page-item" th:classappend="${1 == userList.pageable.pageNumber + 1} ? 'disabled'">
-					<a class="page-link" th:href="@{/admin/userList(page=${userList.pageable.pageNumber - 1}, searchText=${param.searchText})}"
+				<li class="page-item" th:classappend="${1 == boardList.pageable.pageNumber + 1} ? 'disabled'">
+					<a class="page-link" th:href="@{/admin/boardList(page=${boardList.pageable.pageNumber - 1}, searchText=${param.searchText})}"
 						tabindex="-1" aria-disabled="true">Previous</a>
 				</li>
-				<li class="page-item" th:classappend="${i == userList.pageable.pageNumber + 1} ? 'disabled'"
+				<li class="page-item" th:classappend="${i == boardList.pageable.pageNumber + 1} ? 'disabled'"
 					th:each="i : ${#numbers.sequence(startPage, endPage)}">
-					<a class="page-link" th:href="@{/admin/userList(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}">1</a>
+					<a class="page-link" th:href="@{/admin/boardList(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}">1</a>
 				</li>
 
 				<li class="page-item"
-					th:classappend="${userList.totalPages == userList.pageable.pageNumber + 1} ? 'disabled'">
-					<a class="page-link" th:href="@{/admin/userList(page=${userList.pageable.pageNumber + 1}, searchText=${param.searchText})}">
+					th:classappend="${boardList.totalPages == boardList.pageable.pageNumber + 1} ? 'disabled'">
+					<a class="page-link" th:href="@{/admin/boardList(page=${boardList.pageable.pageNumber + 1}, searchText=${param.searchText})}">
 						Next</a>
 				</li>
 			</ul>
@@ -90,42 +85,43 @@
 		crossorigin="anonymous"></script>
 
 	<script th:inline="javascript">
-		$(".deleteButton").click(function(){
+		$(".deleteButton").click(function() {
+			
 			var answer = confirm("정말로 삭제하시겠습니까?");
-			if(answer==true) {
+			if(answer==true){
 				const token = $("meta[name='_csrf']").attr("content");
 				const header = $("meta[name='_csrf_header']").attr("content");
 
 				var button =$(this);
 				var tr = button.parent().parent();
 				var td =tr.children();
-				var userId =td.eq(0).text();
+				var boardId =td.eq(0).text();
 
-				console.log(userId);
+			
+				
 				$.ajax({
-					url: "http://localhost:8080/admin/userDelete/" + userId,
-					type: "DELETE",
+					url : "http://localhost:8080/admin/boardDelete/" + boardId,
+					type : "DELETE",
 
-					beforeSend: function (xhr) {
-						if (token && header) {
-							xhr.setRequestHeader("Accept", "application/json; charset=utf-8");
-							xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+					beforeSend : function(xhr){
+						if(token && header){
+							xhr.setRequestHeader("Accept","application/json; charset=utf-8");
+							xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
 							xhr.setRequestHeader(header, token);
 						}
 					},
-
-					success: function () {
+					
+					success : function() {
 						alert("삭제 성공!");
-						location.href = "/admin/userList";
+						location.href = "/admin/boardList";
 					},
-					error: function (error) {
+					error : function(error) {
 						console.log(error);
 						alert("삭제 실패!");
 					}
 				});
 			}
 		});
-
 		
 		</script>
 
