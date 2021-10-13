@@ -17,7 +17,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
         //로그인 성공시 필요한 작업 추가
-        System.out.println("로그인 성공!!  " + request.getParameter("userName") + " " + request.getParameter("userPassword"));
+        System.out.println("로그인 성공!!  " + "userName : " + request.getParameter("userName") + ", userPassword :  " + request.getParameter("userPassword"));
         response.sendRedirect("/");
     }
 }

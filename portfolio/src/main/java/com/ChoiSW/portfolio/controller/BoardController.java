@@ -1,10 +1,11 @@
 package com.ChoiSW.portfolio.controller;
 
-import com.ChoiSW.portfolio.model.Board;
+import com.ChoiSW.portfolio.entity.Board;
 import com.ChoiSW.portfolio.repository.BoardRepository;
 import com.ChoiSW.portfolio.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -33,15 +34,13 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    /*@Autowired
-    private BoardValidator boardValidator;*/
 
 
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 5, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText){
 
-        Page<Board> boardList = boardRepository.findBoardByTitleContainingOrContentContaining(searchText,searchText,pageable);
+        Page<Board> boardList = boardRepository.findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(searchText,searchText,pageable);
 
         int startPage = Math.max(1,boardList.getPageable().getPageNumber() - 5);
         int endPage;
@@ -56,6 +55,7 @@ public class BoardController {
         model.addAttribute("boardList",boardList);
         return "board/list";
     }
+
 
     @GetMapping("/view")
     public String view(Model model, Long boardId){
@@ -106,15 +106,22 @@ public class BoardController {
         LocalDateTime currentTime = LocalDateTime.now();
         board.setUpdatedDate(currentTime);
         boardService.save(userName, board);
-        System.out.println("update 성공");
+        System.out.println(board.getBoardId()+"번" +" "+ ", title : "+ board.getTitle() + " update 성공");
 
         return "redirect:/board/list";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long boardId){
-        Board board =boardRepository.findById(boardId).orElse(null);
-        boardRepository.delete(board);
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+
+        if(boardService.isDeleted(boardId)){
+            System.out.println("board"+boardId+"번"  + " delete 성공");
+            return new ResponseEntity<>("{}", HttpStatus.OK);
+        }
+        else{
+            System.out.println("board"+boardId + " delete 실패");
+            return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
+        }
+
     }
 }

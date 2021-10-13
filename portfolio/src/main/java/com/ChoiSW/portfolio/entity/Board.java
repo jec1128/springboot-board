@@ -1,4 +1,4 @@
-package com.ChoiSW.portfolio.model;
+package com.ChoiSW.portfolio.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -6,7 +6,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -33,10 +32,12 @@ public class Board {
 
     private int viewCount;
 
-
+    private Boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     @JsonIgnore
     private User user;
+
+
 }

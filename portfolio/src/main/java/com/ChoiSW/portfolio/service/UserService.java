@@ -1,8 +1,8 @@
 package com.ChoiSW.portfolio.service;
 
 
-import com.ChoiSW.portfolio.model.Role;
-import com.ChoiSW.portfolio.model.User;
+import com.ChoiSW.portfolio.entity.Role;
+import com.ChoiSW.portfolio.entity.User;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +19,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    /*public User getUserByUserName(String userName) throws Exception {
-        return userRepository.findByUserName(userName);
-    }*/
 
     /*
     id 와 비밀번호만으로는 회원가입이 안된다
@@ -41,7 +37,7 @@ public class UserService {
 
             // set the user role
             user.setUserEnabled(true);
-
+            user.setIsDeleted(false);
             Role role = new Role();
             role.setRoleId(authority);   //1이 user 2가 admin
             user.getRoleList().add(role);
@@ -52,6 +48,12 @@ public class UserService {
             System.out.println("userService : save 함수안 " + e.getMessage());
         }
         return -1;
+    }
+
+    @Transactional
+    public boolean isDeleted(Long userId){
+        userRepository.updateisDeleted(userId);
+        return true;
     }
 
 }

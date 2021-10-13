@@ -1,4 +1,4 @@
-package com.ChoiSW.portfolio.model;
+package com.ChoiSW.portfolio.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

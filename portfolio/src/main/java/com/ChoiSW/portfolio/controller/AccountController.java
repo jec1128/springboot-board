@@ -1,7 +1,7 @@
 package com.ChoiSW.portfolio.controller;
 
 import com.ChoiSW.portfolio.dto.RegisterForm;
-import com.ChoiSW.portfolio.model.User;
+import com.ChoiSW.portfolio.entity.User;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import com.ChoiSW.portfolio.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class AccountController {
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> register(@RequestBody RegisterForm registerForm){
-        System.out.println(registerForm.getUserName() + "  " + registerForm.getUserPassword() + "  " + registerForm.getUserAuthority());
+        System.out.println(registerForm.getUserName() + "  " + registerForm.getUserPassword() + "  " + " 권한 : " + registerForm.getUserAuthority());
         User user = new User();
         user.setUserName(registerForm.getUserName());
         user.setUserPassword(registerForm.getUserPassword());
@@ -48,12 +48,12 @@ public class AccountController {
 
         if(userExists != null) {
             System.out.println("이미 존재함 user duplicate");
-            return new ResponseEntity<>("{}}", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
         }
         else {
             try {
                 if(userService.save(user,registerForm.getUserAuthority()) == 1) {   // 1이 성공 -1이 실패
-                    System.out.println("회원가입 성공 register success");
+                    System.out.println("userName : " +user.getUserName() + "  userPassword : " +user.getUserPassword() +  " 회원가입 성공 register success");
                     return new ResponseEntity<>("{}", HttpStatus.OK);
                 }
                 else{

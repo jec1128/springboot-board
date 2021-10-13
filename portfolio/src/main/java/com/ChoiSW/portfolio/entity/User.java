@@ -1,7 +1,6 @@
-package com.ChoiSW.portfolio.model;
+package com.ChoiSW.portfolio.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,8 +16,11 @@ public class User {
     private long userId;
     private String userName;
     private String userPassword;
-    private LocalDateTime createdDate;
     private Boolean userEnabled;
+    private LocalDateTime createdDate;
+    private Boolean isDeleted;
+
+
 
     @ManyToMany
     @JoinTable(
@@ -29,7 +31,9 @@ public class User {
 
     private List<Role> roleList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Board 클래스의 변수명(29번째 줄)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Board 클래스의 변수명(41번째 줄)
     private List<Board> boardList = new ArrayList<>();
+
+
 
 }

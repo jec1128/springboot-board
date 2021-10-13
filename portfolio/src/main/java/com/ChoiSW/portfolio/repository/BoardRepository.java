@@ -1,11 +1,12 @@
 package com.ChoiSW.portfolio.repository;
 
-import com.ChoiSW.portfolio.model.Board;
+import com.ChoiSW.portfolio.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,11 +14,19 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-     List<Board> findBoardByTitle(String title);
-     List<Board> findBoardByTitleOrContent(String title, String content);
-     Page<Board> findBoardByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+     //clearautomatically : 캐쉬초기화 같은 의미임 , 즉 create, update, delete 후엔 해줘야함.
+     //@Modifying(clearAutomatically = true )
+     /*@Query(value = "SELECT * from Board b join User u on(u.userId = b.user.userId and b.isDeleted = false and b.user.isDeleted = false " +
+             "and b.title like %:title% and b.content like %:content%)",nativeQuery = true)
+          Page<Board> list(@Param("title")String title, @Param("content")String content, Pageable pageable);*/
 
-     @Modifying
+     Page<Board> findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(String title, String content, Pageable pageable);
+
+     @Modifying(clearAutomatically = true)
      @Query("UPDATE Board b SET b.viewCount = b.viewCount + 1 WHERE b.boardId = :boardId")
-     int updateViewCount(Long boardId);
+          int updateViewCount(Long boardId);
+
+     @Modifying(clearAutomatically = true)
+     @Query("UPDATE Board b SET b.isDeleted = true WHERE b.boardId = :boardId")
+          void updateIsDeleted(Long boardId);
 }

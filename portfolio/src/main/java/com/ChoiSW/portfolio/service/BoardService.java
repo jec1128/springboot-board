@@ -1,7 +1,7 @@
 package com.ChoiSW.portfolio.service;
 
-import com.ChoiSW.portfolio.model.Board;
-import com.ChoiSW.portfolio.model.User;
+import com.ChoiSW.portfolio.entity.Board;
+import com.ChoiSW.portfolio.entity.User;
 import com.ChoiSW.portfolio.repository.BoardRepository;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +27,19 @@ public class BoardService {
         board.setCreatedDate(currentTime);
         board.setUpdatedDate(currentTime);
         board.setViewCount(0);
+        board.setIsDeleted(false);
         return boardRepository.save(board);
     }
 
     @Transactional
-    public int updateViewCount(Long boardId){
-        return boardRepository.updateViewCount(boardId);
+    public void updateViewCount(Long boardId){
+        boardRepository.updateViewCount(boardId);
     }
+
+    @Transactional
+    public boolean isDeleted(Long boardId){
+        boardRepository.updateIsDeleted(boardId);
+        return true;
+    }
+
 }
