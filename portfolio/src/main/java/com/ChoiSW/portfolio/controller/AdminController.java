@@ -39,7 +39,7 @@ public class AdminController {
 
     @GetMapping("/main")
     public String main(){
-        return "/admin/main";
+        return "admin/main";
     }
 
     @GetMapping("/userList")
@@ -58,7 +58,7 @@ public class AdminController {
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("userList",userList);
-        return "/admin/userList";
+        return "admin/userList";
     }
 
 
@@ -81,7 +81,7 @@ public class AdminController {
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("boardList",boardList);
-        return "/admin/boardList";
+        return "admin/boardList";
     }
 
 

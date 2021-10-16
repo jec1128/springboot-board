@@ -24,17 +24,22 @@
 			<p th:text="${board.content}"></p>
 		</div>
 
-		
 
 
 		<th:block th:if="${#authentication.name} == ${board.user.userName} or ${#authorization.expression('hasRole(''ADMIN'')')}">
 			<div class="float-right">
 				<button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
 
-				<a type="button" class="btn btn-primary" id="updateButton" th:href="@{/board/update/{id}(id=${board.boardId})}">수정</a>
+				<span>
+					<th:block th:if="${#authentication.name} == ${board.user.userName}">
+						<a type="button" class="btn btn-primary" id="updateButton" th:href="@{/board/update/{id}(id=${board.boardId})}">수정</a>
+					</th:block>
+				</span>
 			</div>
 		</th:block>
-		
+
+
+
 		<br>
 	</div>
 

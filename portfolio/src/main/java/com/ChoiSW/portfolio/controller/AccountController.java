@@ -29,12 +29,12 @@ public class AccountController {
                         Model model) {
         model.addAttribute("error",error);
         model.addAttribute("exception",exception);
-        return "/account/login";
+        return "account/login";
     }
 
     @GetMapping("/register")
     public String register() {
-        return "/account/register";
+        return "account/register";
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

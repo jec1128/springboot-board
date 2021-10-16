@@ -90,7 +90,6 @@ public class BoardController {
     public String update(Model model, @PathVariable("id") Long boardId){
         Board board =boardRepository.findById(boardId).orElse(null);
         model.addAttribute("board", board);
-        System.out.println("수정하는 페이지(getmapping) 컨트롤러");
 
         return "board/update";
     }

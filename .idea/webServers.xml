@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="38830608-9b2b-4c85-bc83-d5ced48e2446" name="portfolioServer">
+        <fileTransfer rootFolder="/home/ubuntu" accessType="SFTP" host="146.56.185.160" port="22" sshConfigId="3fc1a62c-97da-4dc4-a676-f8837cf8e784" sshConfig="portfolioServer" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
