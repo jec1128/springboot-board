@@ -69,7 +69,7 @@
 				const header = $("meta[name='_csrf_header']").attr("content");
 				var boardId = [[ ${board.boardId} ]];
 				$.ajax({
-					url : "http://localhost:8080/board/delete/" + boardId,
+					url : "/board/delete/" + boardId,
 					type : "DELETE",
 
 					beforeSend : function(xhr){

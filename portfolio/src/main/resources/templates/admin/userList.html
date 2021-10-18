@@ -103,7 +103,7 @@
 
 				console.log(userId);
 				$.ajax({
-					url: "http://localhost:8080/admin/userDelete/" + userId,
+					url: "/admin/userDelete/" + userId,
 					type: "DELETE",
 
 					beforeSend: function (xhr) {
@@ -120,6 +120,7 @@
 					},
 					error: function (error) {
 						console.log(error);
+						alert(error);
 						alert("삭제 실패!");
 					}
 				});

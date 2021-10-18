@@ -65,12 +65,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 //인증처리
                 .usersByUsernameQuery("select userName, userPassword, userEnabled "
-                        + "from user "
+                        + "from User "
                         + "where userName = ?")
                 //권한처리
                 .authoritiesByUsernameQuery("select u.userName, r.roleName "
-                        + "from user_role ur inner join user u on ur.user_id = u.userId "
-                        + "inner join role r on ur.role_id = r.roleId "
+                        + "from user_role ur inner join User u on ur.user_id = u.userId "
+                        + "inner join Role r on ur.role_id = r.roleId "
                         + "where u.userName = ?");
     }
 

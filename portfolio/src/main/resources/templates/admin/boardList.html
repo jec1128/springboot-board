@@ -100,7 +100,7 @@
 			
 				
 				$.ajax({
-					url : "http://localhost:8080/admin/boardDelete/" + boardId,
+					url : "/admin/boardDelete/" + boardId,
 					type : "DELETE",
 
 					beforeSend : function(xhr){
@@ -117,6 +117,7 @@
 					},
 					error : function(error) {
 						console.log(error);
+						alert(error);
 						alert("삭제 실패!");
 					}
 				});
