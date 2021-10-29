@@ -22,15 +22,12 @@
             <p th:unless ="${exception == 'Bad credentials'}" class="alert alert-danger">Error</p>
         </div>
 
-       
+            <label for="inputId" class="sr-only">ID</label>
+            <input type="text" id="inputId" name="userName" class="form-control" placeholder="ID" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" name="userPassword" class="form-control" placeholder="Password" required>
 
-        <label for="inputId" class="sr-only">ID</label>
-        <input type="text" id="inputId" name="userName" class="form-control" placeholder="ID" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" name="userPassword" class="form-control" placeholder="Password" required>
-        
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-        
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
     </form>
 
     

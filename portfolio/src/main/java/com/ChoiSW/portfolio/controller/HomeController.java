@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
+
 public class HomeController {
 
     @GetMapping("/")
@@ -14,9 +15,8 @@ public class HomeController {
     }
 
 
-    @GetMapping("access-denied")
+    @GetMapping("/access-denied")
     public String denied(){
-        System.out.println("homeController access denied");
-        return "/access-denied";
+        return "access-denied";
     }
 }

@@ -2,6 +2,7 @@ package com.ChoiSW.portfolio.controller;
 
 import com.ChoiSW.portfolio.entity.Board;
 import com.ChoiSW.portfolio.entity.User;
+import com.ChoiSW.portfolio.error.exception.InternalServerException;
 import com.ChoiSW.portfolio.repository.BoardRepository;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import com.ChoiSW.portfolio.service.BoardService;
@@ -94,7 +95,7 @@ public class AdminController {
         }
         else{
             System.out.println("user"+userId +"번" + " delete 실패");
-            return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
+            throw new InternalServerException("AdminController user delete failure");
         }
     }
 
@@ -107,7 +108,7 @@ public class AdminController {
         }
         else{
             System.out.println("board"+boardId +"번" + " delete 실패");
-            return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
+            throw new InternalServerException("AdminController board delete failure");
         }
 
     }

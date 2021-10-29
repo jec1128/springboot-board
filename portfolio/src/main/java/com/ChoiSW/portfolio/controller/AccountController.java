@@ -2,6 +2,8 @@ package com.ChoiSW.portfolio.controller;
 
 import com.ChoiSW.portfolio.dto.RegisterForm;
 import com.ChoiSW.portfolio.entity.User;
+import com.ChoiSW.portfolio.error.exception.DuplicateIdException;
+import com.ChoiSW.portfolio.error.exception.InternalServerException;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import com.ChoiSW.portfolio.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class AccountController {
 
         if(userExists != null) {
             System.out.println("이미 존재함 user duplicate");
-            return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
+            throw new DuplicateIdException("user duplicate exception");
         }
         else {
             try {
@@ -58,19 +60,17 @@ public class AccountController {
                 }
                 else{
                     System.out.println("회원가입 실패 register fail");
-                    return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+                    throw new InternalServerException("register fail server error");
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("회원가입 실패 register error " + e.getMessage());
+                throw new InternalServerException("register fail server error");
             }
 
         }
-        System.out.println("회원가입 에러 발생");
-        return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
 
     }
-
 
 }

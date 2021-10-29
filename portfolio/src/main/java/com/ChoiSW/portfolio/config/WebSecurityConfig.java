@@ -30,16 +30,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;
 
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     //인증절차에 관한 설명
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
 
+
+
                 .authorizeRequests()
                     .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                    .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**","/account/login*").permitAll()
+                    .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**","/account/login*","/access-denied").permitAll()
                     .anyRequest().authenticated()
+                    .and()
+                .httpBasic()
                     .and()
                 .formLogin()
                     .loginPage("/account/login")
@@ -51,10 +57,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .logout()
                     .logoutSuccessUrl("/")
-                    .invalidateHttpSession(true)
-                    .permitAll();
+                    .permitAll()
+                    .and()
+                .exceptionHandling()
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler);
 
-        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
     }
 
     //인증을 위한 사용자 설명

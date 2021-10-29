@@ -1,11 +1,12 @@
 package com.ChoiSW.portfolio.controller;
 
 import com.ChoiSW.portfolio.entity.Board;
+import com.ChoiSW.portfolio.error.exception.MethodArgumentInvalidException;
+import com.ChoiSW.portfolio.error.exception.InternalServerException;
 import com.ChoiSW.portfolio.repository.BoardRepository;
 import com.ChoiSW.portfolio.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,10 +75,10 @@ public class BoardController {
     }
 
     @PostMapping("/write") //write.html 내용을 처리하기
-    public String write(@Valid Board board, @RequestParam(value = "file", required = false) MultipartFile file , BindingResult bindingResult, Authentication authentication){
+    public String write(@Valid Board board, Errors errors, Authentication authentication){
 
-        if(bindingResult.hasErrors()){
-            return "board/write";
+        if(errors.hasErrors()){
+            throw new MethodArgumentInvalidException("bingresults has error so writing failure");
         }
 
         String userName = authentication.getName();
@@ -95,10 +97,10 @@ public class BoardController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@PathVariable("id") Long boardId, @Valid Board board, BindingResult bindingResult, Authentication authentication){
+    public String update(@PathVariable("id") Long boardId, @Valid Board board, Errors errors, Authentication authentication){
 
-        if(bindingResult.hasErrors()){
-            return "board/update";
+        if(errors.hasErrors()){
+            throw new MethodArgumentInvalidException("bingresults has error so updating failure");
         }
 
         String userName = authentication.getName();
@@ -119,7 +121,7 @@ public class BoardController {
         }
         else{
             System.out.println("board"+boardId + " delete 실패");
-            return new ResponseEntity<>("{}", HttpStatus.CONFLICT);
+            throw new InternalServerException("boardController board delete failure");
         }
 
     }
