@@ -41,6 +41,7 @@ public class UserService {
             Role role = new Role();
             role.setRoleId(authority);   //1이 user 2가 admin
             user.getRoleList().add(role);
+
             userRepository.save(user);
             return 1;
         } catch (Exception e){

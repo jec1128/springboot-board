@@ -15,18 +15,14 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
      //clearautomatically : 캐쉬초기화 같은 의미임 , 즉 create, update, delete 후엔 해줘야함.
-     //@Modifying(clearAutomatically = true )
-     /*@Query(value = "SELECT * from Board b join User u on(u.userId = b.user.userId and b.isDeleted = false and b.user.isDeleted = false " +
-             "and b.title like %:title% and b.content like %:content%)",nativeQuery = true)
-          Page<Board> list(@Param("title")String title, @Param("content")String content, Pageable pageable);*/
 
      Page<Board> findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(String title, String content, Pageable pageable);
 
-     @Modifying(clearAutomatically = true)
+
      @Query("UPDATE Board b SET b.viewCount = b.viewCount + 1 WHERE b.boardId = :boardId")
           int updateViewCount(Long boardId);
 
-     @Modifying(clearAutomatically = true)
+
      @Query("UPDATE Board b SET b.isDeleted = true WHERE b.boardId = :boardId")
           void updateIsDeleted(Long boardId);
 }
