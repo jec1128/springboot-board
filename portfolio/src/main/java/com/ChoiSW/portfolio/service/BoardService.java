@@ -2,6 +2,8 @@ package com.ChoiSW.portfolio.service;
 
 import com.ChoiSW.portfolio.entity.Board;
 import com.ChoiSW.portfolio.entity.User;
+import com.ChoiSW.portfolio.error.exception.DuplicateIdException;
+import com.ChoiSW.portfolio.error.exception.NotExistedException;
 import com.ChoiSW.portfolio.repository.BoardRepository;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +35,15 @@ public class BoardService {
 
     @Transactional
     public void updateViewCount(Long boardId){
-        boardRepository.updateViewCount(boardId);
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new NotExistedException("board not existed excpetion"));
+        int viewCount = board.getViewCount();
+        board.setViewCount(viewCount + 1);
     }
 
     @Transactional
     public boolean isDeleted(Long boardId){
-        boardRepository.updateIsDeleted(boardId);
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new NotExistedException("board not existed excpetion"));
+        board.setIsDeleted(true);
         return true;
     }
 

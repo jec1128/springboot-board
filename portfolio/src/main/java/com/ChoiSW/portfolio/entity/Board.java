@@ -3,6 +3,7 @@ package com.ChoiSW.portfolio.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ public class Board {
 
     private Boolean isDeleted;
 
+    //@ManyToOne(fetch = FetchType.LAZY) //이렇게하면 N+1 문제가 발생할수있다
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     @JsonIgnore

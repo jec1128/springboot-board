@@ -7,7 +7,7 @@ public enum ErrorCode {
     ACCESS_DENIED(403, "C001", "Access is denied"),
     INTERNAL_SERVER(500,"C002", "Internal Server Error"),
     REQUEST_REJECT(400,"C003","request reject"),
-
+    NOT_EXISTED(400,"C004","Not existed"),
     //Register
     DUPLICATE_ID(400,"R001","Id is duplicate"),
 

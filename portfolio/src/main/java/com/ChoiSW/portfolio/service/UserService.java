@@ -1,8 +1,10 @@
 package com.ChoiSW.portfolio.service;
 
 
+import com.ChoiSW.portfolio.entity.Board;
 import com.ChoiSW.portfolio.entity.Role;
 import com.ChoiSW.portfolio.entity.User;
+import com.ChoiSW.portfolio.error.exception.NotExistedException;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +42,9 @@ public class UserService {
             user.setIsDeleted(false);
             Role role = new Role();
             role.setRoleId(authority);   //1이 user 2가 admin
-            user.getRoleList().add(role);
+
+            user.setRole(role);
+
 
             userRepository.save(user);
             return 1;
@@ -53,7 +57,8 @@ public class UserService {
 
     @Transactional
     public boolean isDeleted(Long userId){
-        userRepository.updateisDeleted(userId);
+        User user = userRepository.findById(userId).orElseThrow(()->new NotExistedException("user not existed excpetion"));
+        user.setIsDeleted(true);
         return true;
     }
 

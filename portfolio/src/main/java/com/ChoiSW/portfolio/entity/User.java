@@ -21,19 +21,13 @@ public class User {
     private Boolean isDeleted;
 
 
-
-    @ManyToMany
+    @ManyToOne
     @JoinTable(
             name = "user_role",       //(테이블이름)
             joinColumns = @JoinColumn(name = "user_id"),   //테이블 외래키
             inverseJoinColumns = @JoinColumn(name = "role_id") //반대쪽 테이블 외래키
     )
-
-    private List<Role> roleList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // Board 클래스의 변수명(41번째 줄)
-    private List<Board> boardList = new ArrayList<>();
-
+    private Role role;
 
 
 }

@@ -16,7 +16,4 @@ public class Role {
 
     private String roleName;
 
-    @ManyToMany(mappedBy = "roleList")   //model/User 안에 있는 컬럼이름(private List<Role> roleList;)
-    @JsonIgnore
-    private List<User> userList = new ArrayList<>();
 }

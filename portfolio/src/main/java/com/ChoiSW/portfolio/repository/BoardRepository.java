@@ -19,10 +19,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
      Page<Board> findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(String title, String content, Pageable pageable);
 
 
-     @Query("UPDATE Board b SET b.viewCount = b.viewCount + 1 WHERE b.boardId = :boardId")
-          int updateViewCount(Long boardId);
-
-
-     @Query("UPDATE Board b SET b.isDeleted = true WHERE b.boardId = :boardId")
-          void updateIsDeleted(Long boardId);
+     /*@Query("UPDATE Board b SET b.isDeleted = true WHERE b.boardId = :boardId")
+          void updateIsDeleted(Long boardId);*/
 }
