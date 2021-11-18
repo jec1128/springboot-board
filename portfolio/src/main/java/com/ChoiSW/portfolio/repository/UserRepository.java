@@ -18,8 +18,4 @@ public interface UserRepository extends JpaRepository <User,Long>{
     User findByUserName(String userName);
     Page<User> findUserByUserNameContainsAndIsDeletedFalse(String userName, Pageable pageable);
 
-    /*
-    @Query("UPDATE User u SET u.isDeleted = true WHERE u.userId = :userId")
-    void updateisDeleted(Long userId);*/
-
 }

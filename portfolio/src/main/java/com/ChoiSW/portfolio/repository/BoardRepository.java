@@ -11,14 +11,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+//@Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
      //clearautomatically : 캐쉬초기화 같은 의미임 , 즉 create, update, delete 후엔 해줘야함.
 
      Page<Board> findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(String title, String content, Pageable pageable);
-
-
-     /*@Query("UPDATE Board b SET b.isDeleted = true WHERE b.boardId = :boardId")
-          void updateIsDeleted(Long boardId);*/
+     Page<Board> findAllByIsDeletedFalse(Pageable pageable);
 }

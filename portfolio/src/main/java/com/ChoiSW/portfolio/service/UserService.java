@@ -1,9 +1,9 @@
 package com.ChoiSW.portfolio.service;
 
 
-import com.ChoiSW.portfolio.entity.Board;
-import com.ChoiSW.portfolio.entity.Role;
+import com.ChoiSW.portfolio.dto.RegisterDTO;
 import com.ChoiSW.portfolio.entity.User;
+import com.ChoiSW.portfolio.error.exception.DuplicateIdException;
 import com.ChoiSW.portfolio.error.exception.NotExistedException;
 import com.ChoiSW.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,38 +22,48 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    public boolean register(RegisterDTO registerDTO) throws Exception {
+        User userExists = userRepository.findByUserName(registerDTO.getUserName());
+
+        if(userExists!=null){
+            System.out.println("이미 존재함 user duplicate");
+            throw new DuplicateIdException("user duplicate exception");
+
+        }
+
+        return save(registerDTO); //1이 성공
+
+    }
     /*
     id 와 비밀번호만으로는 회원가입이 안된다
     그래서 이 세이브 함수안에
     권한설정과 비밀번호 암호화등 나머지 컬럼들을 채워주는 역할
      */
     @Transactional
-    public int save(User user, int authority) throws Exception {
-        try {
-            // encoding the password
-            String encodedPassword = passwordEncoder.encode(user.getUserPassword());
-            user.setUserPassword(encodedPassword);
+    public boolean save(RegisterDTO registerDTO) throws Exception {
 
-            LocalDateTime currentTime = LocalDateTime.now();
-            user.setCreatedDate(currentTime);
+        User user = new User();
+        user.setUserName(registerDTO.getUserName());
+        String encodedPassword = passwordEncoder.encode(registerDTO.getUserPassword());
+        user.setUserPassword(encodedPassword);
 
-            // set the user role
-            user.setUserEnabled(true);
-            user.setIsDeleted(false);
-            Role role = new Role();
-            role.setRoleId(authority);   //1이 user 2가 admin
+        if(registerDTO.getUserAuthority() == 1)
+            user.setRole("ROLE_USER");
+        else
+            user.setRole("ROLE_ADMIN");
 
-            user.setRole(role);
+        user.setCreatedDate(LocalDateTime.now());
 
+        // set the user role
+        user.setUserEnabled(true);
+        user.setIsDeleted(false);
+        userRepository.save(user);
 
-            userRepository.save(user);
-            return 1;
-        } catch (Exception e){
-            e.printStackTrace();
-            System.out.println("userService : save 함수안 " + e.getMessage());
-        }
-        return -1;
+        System.out.println(user.getUserName()+" 님이 회원가입에 성공하셨습니다");
+        return true;
     }
+
 
     @Transactional
     public boolean isDeleted(Long userId){

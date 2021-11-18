@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RegisterForm {
+public class RegisterDTO {
     private String userName;
     private String userPassword;
-    private int userAuthority;
+    private int userAuthority;   //1이 유저, 2가 admin
 }

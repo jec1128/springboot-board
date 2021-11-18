@@ -33,6 +33,7 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
+
     @Transactional
     public void updateViewCount(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(()->new NotExistedException("board not existed excpetion"));

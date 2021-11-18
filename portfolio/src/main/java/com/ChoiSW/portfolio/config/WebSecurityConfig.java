@@ -82,14 +82,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder())
                 //인증처리
-                .usersByUsernameQuery("select userName, userPassword, userEnabled "
-                        + "from User "
-                        + "where userName = ?")
+                .usersByUsernameQuery("select user_name, user_password, user_enabled "
+                        + "from user "
+                        + "where user_name = ?")
                 //권한처리
-                .authoritiesByUsernameQuery("select u.userName, r.roleName "
-                        + "from user_role ur inner join User u on ur.user_id = u.userId "
-                        + "inner join Role r on ur.role_id = r.roleId "
-                        + "where u.userName = ?");
+                .authoritiesByUsernameQuery("select user_name, role from user "
+                        + "where user_name = ?");
     }
 
     //비밀번호 암호화해주는 함수

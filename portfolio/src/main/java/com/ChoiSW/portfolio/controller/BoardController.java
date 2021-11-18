@@ -43,7 +43,7 @@ public class BoardController {
                        @RequestParam(required = false, defaultValue = "") String searchText){
 
         Page<Board> boardList = boardRepository.findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(searchText,searchText,pageable);
-
+        //Page<Board> boardList = boardRepository.findAllByIsDeletedFalse(pageable);
         int startPage = Math.max(1,boardList.getPageable().getPageNumber() - 5);
         int endPage;
         if(boardList.getTotalPages()==0){
@@ -83,7 +83,7 @@ public class BoardController {
 
         String userName = authentication.getName();
         boardService.save(userName, board);
-        System.out.println("write 성공");
+        System.out.println(userName + " 님이 write 성공");
 
         return "redirect:/board/list";
     }

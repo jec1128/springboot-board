@@ -70,7 +70,7 @@ public class AdminController {
 
 
         Page<Board> boardList = boardRepository.findBoardByIsDeletedFalseAndTitleContainingAndUserIsDeletedFalseOrIsDeletedFalseAndContentContainingAndUserIsDeletedFalse(searchText,searchText, pageable);
-
+        //Page<Board> boardList = boardRepository.findAllByIsDeletedFalse(pageable);
         int startPage = Math.max(1,boardList.getPageable().getPageNumber() - 5);
         int endPage;
         if(boardList.getTotalPages()==0){

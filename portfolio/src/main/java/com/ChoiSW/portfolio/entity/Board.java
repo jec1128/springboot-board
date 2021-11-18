@@ -3,6 +3,7 @@ package com.ChoiSW.portfolio.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+//더티체킹으로 인해서 업데이트 되는 컬럼만 수정하도록 하는 어노테이션
+//@DynamicUpdate
 public class Board {
 
     @Id // 프라이머리 키라는뜻 제일 위에것만
@@ -37,7 +40,7 @@ public class Board {
 
     //@ManyToOne(fetch = FetchType.LAZY) //이렇게하면 N+1 문제가 발생할수있다
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+//    @JoinColumn(name = "userId", referencedColumnName = "userId")
     @JsonIgnore
     private User user;
 
