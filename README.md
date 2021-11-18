@@ -3,4 +3,8 @@
 
 혼자서 하는 토이 프로젝트입니다
 
-SpringBoot, thymeleaf, bootstrap 등 사용
+SpringBoot, jpa, security, thymeleaf, bootstrap
+
+linux 서버와 가비아 도메인을 통해 배포함
+
+
