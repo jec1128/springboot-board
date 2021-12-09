@@ -5,4 +5,4 @@
 
 SpringBoot, jpa, security, thymeleaf, bootstrap
 
-linux 서버와 가비아 도메인을 통해 배포함
+linux 서버와 가비아 도메인을 통해 배포를 경험함
