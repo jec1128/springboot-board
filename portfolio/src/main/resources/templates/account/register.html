@@ -97,14 +97,14 @@
                 error: function (error) {
                     console.log(error.status);
                     
-                    if(error.status == 400){
+                    if(error.status === 400){
                         alert("이미 존재하는 ID입니다. Id를 바꿔주세요");
                         console.log("id duplicate");
                         $('#form-signin').each(function (){
                            this.reset();
                         });
                     }
-                    else if (error.status == 500){
+                    else if (error.status === 500){
                         alert("서버 오류");
                         console.log("server error");
                     }

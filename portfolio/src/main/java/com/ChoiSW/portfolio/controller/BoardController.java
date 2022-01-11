@@ -78,7 +78,7 @@ public class BoardController {
     public String write(@Valid Board board, Errors errors, Authentication authentication){
 
         if(errors.hasErrors()){
-            throw new MethodArgumentInvalidException("bingresults has error so writing failure");
+            throw new MethodArgumentInvalidException("binding results has error so writing failure");
         }
 
         String userName = authentication.getName();
@@ -100,7 +100,7 @@ public class BoardController {
     public String update(@PathVariable("id") Long boardId, @Valid Board board, Errors errors, Authentication authentication){
 
         if(errors.hasErrors()){
-            throw new MethodArgumentInvalidException("bingresults has error so updating failure");
+            throw new MethodArgumentInvalidException("binding results has error so updating failure");
         }
 
         String userName = authentication.getName();

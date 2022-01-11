@@ -43,33 +43,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //구글링해보니 이걸로 해결했다고 해서 일단 적어놓음
                 //강제적으로 https로만 접속하겠다는 기능을 disable함.
                 .headers().httpStrictTransportSecurity().disable()
-                    .and()
-
-                .httpBasic()
-                    .and()
+                .and()
 
                 .authorizeRequests()
-                    .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                    .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**","/account/login*","/access-denied").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/", "/account/register", "/css/**","/api/**","/js/**","/account/login*","/access-denied").permitAll()
+                .anyRequest().authenticated()
+                .and()
 
                 .formLogin()
-                    .loginPage("/account/login")
-                    .usernameParameter("userName")
-                    .passwordParameter("userPassword")
-                    .successHandler(customAuthenticationSuccessHandler)
-                    .failureHandler(customAuthenticationFailureHandler)
-                    .permitAll()
-                    .and()
+                .loginPage("/account/login")
+                .usernameParameter("userName")
+                .passwordParameter("userPassword")
+                .successHandler(customAuthenticationSuccessHandler)
+                .failureHandler(customAuthenticationFailureHandler)
+                .permitAll()
+                .and()
                 .logout()
-                    .logoutSuccessUrl("/")
-                    .permitAll()
-                    .and()
+                .logoutSuccessUrl("/")
+                .permitAll()
+                .and()
 
                 .exceptionHandling()
 
-                    .accessDeniedHandler(accessDeniedHandler);
+                .accessDeniedHandler(accessDeniedHandler);
 
 
 

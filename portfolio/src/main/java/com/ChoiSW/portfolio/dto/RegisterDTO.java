@@ -1,9 +1,9 @@
 package com.ChoiSW.portfolio.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class RegisterDTO {
     private String userName;

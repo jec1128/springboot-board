@@ -2,7 +2,7 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig host="146.56.185.160" id="3fc1a62c-97da-4dc4-a676-f8837cf8e784" keyPath="C:\Users\abcab\OneDrive\바탕 화면\portfolio\ssh-key\ssh-key-2021-10-13.key" port="22" customName="portfolioServer" nameFormat="CUSTOM" username="ubuntu">
+      <sshConfig connectionConfig="{&quot;serverAliveInterval&quot;:300}" host="146.56.185.160" id="3fc1a62c-97da-4dc4-a676-f8837cf8e784" keyPath="C:\Users\abcab\OneDrive\바탕 화면\portfolio\ssh-key\ssh-key-2021-10-13.key" port="22" customName="portfolioServer" nameFormat="CUSTOM" username="ubuntu">
         <option name="customName" value="portfolioServer" />
       </sshConfig>
     </configs>

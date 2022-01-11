@@ -23,7 +23,7 @@ public class BoardService {
 
     @Transactional
     public Board save(String userName, Board board) {
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByUserName(userName).orElseThrow(()->new NotExistedException("board not existed excpetion"));
         board.setUser(user);
         LocalDateTime currentTime = LocalDateTime.now();
         board.setCreatedDate(currentTime);

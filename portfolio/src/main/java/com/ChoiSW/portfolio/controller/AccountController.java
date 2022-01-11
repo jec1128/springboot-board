@@ -1,8 +1,9 @@
 package com.ChoiSW.portfolio.controller;
 
+
 import com.ChoiSW.portfolio.dto.RegisterDTO;
+
 import com.ChoiSW.portfolio.error.exception.InternalServerException;
-import com.ChoiSW.portfolio.repository.UserRepository;
 import com.ChoiSW.portfolio.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,6 @@ public class AccountController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
 
     @GetMapping("/login")
@@ -42,7 +40,7 @@ public class AccountController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) throws Exception {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO){
         if(userService.register(registerDTO)){
             return new ResponseEntity<>("{}", HttpStatus.OK);
         }

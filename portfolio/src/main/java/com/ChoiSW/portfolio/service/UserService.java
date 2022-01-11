@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -23,10 +24,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
-    public boolean register(RegisterDTO registerDTO) throws Exception {
-        User userExists = userRepository.findByUserName(registerDTO.getUserName());
+    public boolean register(RegisterDTO registerDTO) {
+        System.out.println(registerDTO.getUserName());
 
-        if(userExists!=null){
+        Optional<User> userExists = userRepository.findByUserName(registerDTO.getUserName());
+
+
+        if(userExists.isPresent()){
             System.out.println("이미 존재함 user duplicate");
             throw new DuplicateIdException("user duplicate exception");
 
@@ -41,7 +45,7 @@ public class UserService {
     권한설정과 비밀번호 암호화등 나머지 컬럼들을 채워주는 역할
      */
     @Transactional
-    public boolean save(RegisterDTO registerDTO) throws Exception {
+    public boolean save(RegisterDTO registerDTO) {
 
         User user = new User();
         user.setUserName(registerDTO.getUserName());
